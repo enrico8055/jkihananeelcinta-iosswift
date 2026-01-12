@@ -23,5 +23,9 @@ struct User: Identifiable {
     var fatherFullName: String
     var motherFullName: String
     var statusInFamily: String
+    var childrenName: String
+    var wifeName: String
     var profileImageURL: URL?
+    var husbandName: String
+    var siblingsName: String
 }

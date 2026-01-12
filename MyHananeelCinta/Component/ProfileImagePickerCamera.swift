@@ -1,9 +1,9 @@
 import SwiftUI
-import PhotosUI
+import UIKit
 
-struct ProfileImagePicker: View {
+struct ProfileImagePickerCamera: View {
     @Binding var image: UIImage?
-    @State private var showPicker = false
+    @State private var showCamera = false
     
     var body: some View {
         VStack {
@@ -16,7 +16,7 @@ struct ProfileImagePicker: View {
                     .overlay(Circle().stroke(Color.orange, lineWidth: 3))
                     .shadow(radius: 4)
                     .onTapGesture {
-                        showPicker = true
+                        showCamera = true
                     }
             } else {
                 ZStack {
@@ -30,78 +30,67 @@ struct ProfileImagePicker: View {
                         .foregroundColor(.white)
                 }
                 .onTapGesture {
-                    showPicker = true
+                    showCamera = true
                 }
             }
             
-            Text("Tap untuk pilih foto")
+            Text("Tap untuk ambil foto")
                 .font(.system(size: 14, weight: .medium))
                 .foregroundColor(.white)
         }
-        .photosPicker(isPresented: $showPicker, selection: $image) 
-    }
-}
-
-extension View {
-    func photosPicker(isPresented: Binding<Bool>, selection: Binding<UIImage?>) -> some View {
-        self.background(
-            PhotosPickerWrapper(isPresented: isPresented, image: selection)
-        )
-    }
-}
-
-
-import PhotosUI
-
-struct PhotosPickerWrapper: UIViewControllerRepresentable {
-    @Binding var isPresented: Bool
-    @Binding var image: UIImage?
-    
-    func makeUIViewController(context: Context) -> UIViewController {
-        let controller = UIViewController()
-        return controller
-    }
-    
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        if isPresented && context.coordinator.picker == nil {
-            var config = PHPickerConfiguration()
-            config.filter = .images
-            config.selectionLimit = 1
-            let picker = PHPickerViewController(configuration: config)
-            picker.delegate = context.coordinator
-            uiViewController.present(picker, animated: true)
-            context.coordinator.picker = picker
+        .sheet(isPresented: $showCamera) {
+            CameraPicker(image: $image)
         }
     }
-    
+}
+
+struct CameraPicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+    @Environment(\.presentationMode) var presentationMode
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.cameraDevice = .front
+        picker.delegate = context.coordinator
+        picker.allowsEditing = true
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-    
-    class Coordinator: NSObject, PHPickerViewControllerDelegate {
-        var parent: PhotosPickerWrapper
-        var picker: PHPickerViewController?
-        
-        init(_ parent: PhotosPickerWrapper) {
-            self.parent = parent
-        }
-        
-        func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            parent.isPresented = false
-            self.picker?.dismiss(animated: true)
-            self.picker = nil
-            
-            guard let provider = results.first?.itemProvider,
-                  provider.canLoadObject(ofClass: UIImage.self) else { return }
-            
-            provider.loadObject(ofClass: UIImage.self) { image, _ in
-                DispatchQueue.main.async {
-                    self.parent.image = image as? UIImage
-                }
+
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: CameraPicker
+        init(_ parent: CameraPicker) { self.parent = parent }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
+                parent.image = uiImage
             }
+            parent.presentationMode.wrappedValue.dismiss()
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.presentationMode.wrappedValue.dismiss()
         }
     }
 }
 
-#Preview {
+
+struct StatefulPreviewWrapper<Value, Content: View>: View {
+    @State var value: Value
+    var content: (Binding<Value>) -> Content
+
+    init(_ value: Value, content: @escaping (Binding<Value>) -> Content) {
+        self._value = State(initialValue: value)
+        self.content = content
+    }
+
+    var body: some View {
+        content($value)
+    }
 }

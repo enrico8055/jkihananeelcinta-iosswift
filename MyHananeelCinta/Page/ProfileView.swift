@@ -89,6 +89,21 @@ struct ProfileView: View {
                                 profileRow("Asal Gereja (bila pindah gereja)", user.churchOrigin)
                                 profileRow("Alasan Pindah Gereja", user.reasonToMovingChurch)
                                 profileRow("Status Pernikahan", user.married)
+                                if user.statusInFamily == "Kepala Keluarga" {
+                                    profileRow("Nama Istri", user.wifeName)
+                                }
+                                
+                                if user.statusInFamily == "Kepala Keluarga" || user.statusInFamily == "Istri" {
+                                    profileRow("Nama Anak", user.childrenName)
+                                }
+                                
+                                if user.statusInFamily == "Istri" {
+                                    profileRow("Nama Suami", user.husbandName)
+                                }
+                                
+                                if user.statusInFamily == "Anak" {
+                                    profileRow("Nama Saudara", user.siblingsName)
+                                }
                                 profileRow("Nama Lengkap Ayah", user.fatherFullName)
                                 profileRow("Nama Lengkap Ibu", user.motherFullName)
                                 profileRow("Status Dalam Keluarga", user.statusInFamily)
@@ -239,7 +254,11 @@ struct ProfileView: View {
                             fatherFullName: data["fatherFullName"] as? String ?? "-",
                             motherFullName: data["motherFullName"] as? String ?? "-",
                             statusInFamily: data["statusInFamily"] as? String ?? "-",
-                            profileImageURL: url
+                            childrenName: data["childrenName"] as? String ?? "-",
+                            wifeName: data["wifeName"] as? String ?? "-",
+                            profileImageURL: url,
+                            husbandName: data["husbandName"] as? String ?? "-",
+                            siblingsName: data["siblingsName"] as? String ?? "-"
                         )
 
                         self.users = [user]

@@ -25,9 +25,13 @@ struct EditProvileView: View {
     @State private var asalGereja: String = ""
     @State private var alasanPindah: String = ""
     @State private var statusPernikahan: String = "Belum Menikah"
+    @State private var namaIstri: String = ""
     @State private var namaAyah: String = ""
     @State private var namaIbu: String = ""
+    @State private var namaAnak: String = ""
+    @State private var namaSaudara: String = ""
     @State private var statusKeluarga: String = ""
+    @State private var namaSuami: String = ""
     let user:User;
     @State private var currentPage: Int = 0
     @State private var showAlert: Bool = false;
@@ -41,208 +45,244 @@ struct EditProvileView: View {
                 Color(red: 51/255, green: 51/255, blue: 51/255)
                     .ignoresSafeArea()
                 
-                TabView(selection: $currentPage) {
-                    
-                    // STEP 1
-                    ScrollView {
-                        VStack(spacing: 16) {
-                            StyledTextField(placeholder: "NIJ", text: $nij, isDisabled: true)
-                            StyledTextField(placeholder: "Email", text: $email, keyboardType: .emailAddress, isDisabled: true)
-                            StyledTextField(placeholder: "Username", text: $username)
-                            
-                           
-                        }
-                        .padding()
-                        .background(CardBackground())
-                        .cornerRadius(16)
-                        .padding(.horizontal)
-                    }
-                    .tag(0)
-                    
-                    // STEP 2
-                    ScrollView {
-                        VStack(spacing: 16) {
-                            StyledTextField(placeholder: "Nama Lengkap", text: $nama)
-                            Text("Jenis Kelamin")
-                                .foregroundColor(.white)
-                                .font(.system(size: 14, weight: .medium))
-                            Picker("", selection: $jenisKelamin) {
-                                Text("Laki-laki").tag("Laki-laki")
-                                Text("Perempuan").tag("Perempuan")
-                            }.pickerStyle(SegmentedPickerStyle())
-                            StyledTextField(placeholder: "Tempat Lahir", text: $tempatLahir)
-                            Text("Tanggal Lahir")
-                                .foregroundColor(.white)
-                                .font(.system(size: 14, weight: .medium))
-                            StyledDatePicker(label: "Tanggal Lahir", selection: $tanggalLahir)
-                            StyledTextField(placeholder: "Nomor Handphone", text: $noTelpon, keyboardType: .phonePad)
-                             
-                             
-                             
-                            
-                            
-                            
-                            
-                        }
-                        .padding()
-                        .background(CardBackground())
-                        .cornerRadius(16)
-                        .padding(.horizontal)
-                    }
-                    .tag(1)
-                    
-                    // STEP 3
-                    ScrollView {
-                        VStack(spacing: 16) {
-                            StyledTextField(placeholder: "Alamat", text: $alamat)
-                            
-                            
-                        }
-                        .padding()
-                        .background(CardBackground())
-                        .cornerRadius(16)
-                        .padding(.horizontal)
-                    }
-                    .tag(2)
-                    
-                    // STEP 4
-                    ScrollView {
-                        VStack(spacing: 16) {
-
-                            Text("Golongan Darah")
-                                .foregroundColor(.white)
-                                .font(.system(size: 14, weight: .medium))
-                            Picker("", selection: $golonganDarah) {
-                                Text("A").tag("A")
-                                Text("B").tag("B")
-                                Text("AB").tag("AB")
-                                Text("O").tag("O")
+                VStack(spacing: 0) {
+                    // Progress bar
+                    VStack(spacing: 8) {
+                        // Progress bar
+                        GeometryReader { geometry in
+                            ZStack(alignment: .leading) {
+                                Rectangle()
+                                    .fill(Color.gray.opacity(0.3))
+                                    .frame(height: 4)
+                                
+                                Rectangle()
+                                    .fill(Color.orange)
+                                    .frame(width: geometry.size.width * CGFloat(currentPage + 1) / 6, height: 4)
                             }
-                            .pickerStyle(SegmentedPickerStyle())
-                            
-                            
-                            Text("Pendidikan Terakhir")
-                                .foregroundColor(.white)
-                                .font(.system(size: 14, weight: .medium))
-                            Picker("", selection: $pendidikan) {
-                                Text("-").tag("-")
-                                Text("SD").tag("SD")
-                                Text("SMP").tag("SMP")
-                                Text("SMA").tag("SMA")
-                                Text("D1,D2,D3").tag("D1,D2,D3")
-                                Text("S1").tag("S1")
-                                Text("S2").tag("S2")
-                                Text("S3").tag("S3")
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
                         }
-                        .padding()
-                        .background(CardBackground())
-                        .cornerRadius(16)
-                        .padding(.horizontal)
+                        .frame(height: 4)
+                        
+                        // Label step
+                        Text("Step \(currentPage + 1) dari 6")
+                            .font(.caption)
+                            .foregroundColor(.gray)
                     }
-                    .tag(3)
-                    
-                    
-                    // STEP 4
-                    ScrollView {
-                        VStack(spacing: 16) {
-
-                            Toggle(isOn: $sudahDibaptis) {
-                                Text("Sudah Baptis Air?")
-                                    .foregroundColor(.white)
+                    .padding(.horizontal)
+                    .padding(.top, 16)
+                    .padding(.bottom, 8)
+                    TabView(selection: $currentPage) {
+                        
+                        // STEP 1
+                        ScrollView {
+                            VStack(spacing: 16) {
+                                StyledTextField(placeholder: "NIJ", text: $nij, isDisabled: true)
+                                StyledTextField(placeholder: "Email", text: $email, keyboardType: .emailAddress, isDisabled: true)
+                                StyledTextField(placeholder: "Username", text: $username)
+                                
+                                
                             }
-                            .toggleStyle(SwitchToggleStyle(tint: .orange))
                             .padding()
-                            .background(Color(red: 66/255, green: 66/255, blue: 66/255))
-                            .cornerRadius(12)
-                            
-                            StyledTextField(placeholder: "Gereja Tempat Baptis Air", text: $gerejaBaptis)
-                            
-                            Text("Kapan Baptis Air?")
-                                .foregroundColor(.white)
-                                .font(.system(size: 14, weight: .medium))
-                            StyledDatePicker(label: "Tanggal Baptis Air", selection: $tanggalBaptisAir)
-                            
-                            Toggle(isOn: $sudahDibaptisRoh) {
-                                Text("Sudah Baptis Roh Kudus?")
+                            .background(CardBackground())
+                            .cornerRadius(16)
+                            .padding(.horizontal)
+                        }
+                        .tag(0)
+                        
+                        // STEP 2
+                        ScrollView {
+                            VStack(spacing: 16) {
+                                StyledTextField(placeholder: "Nama Lengkap", text: $nama)
+                                Text("Jenis Kelamin")
                                     .foregroundColor(.white)
+                                    .font(.system(size: 14, weight: .medium))
+                                Picker("", selection: $jenisKelamin) {
+                                    Text("Laki-laki").tag("Laki-laki")
+                                    Text("Perempuan").tag("Perempuan")
+                                }.pickerStyle(SegmentedPickerStyle())
+                                StyledTextField(placeholder: "Tempat Lahir", text: $tempatLahir)
+                                Text("Tanggal Lahir")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 14, weight: .medium))
+                                StyledDatePicker(label: "Tanggal Lahir", selection: $tanggalLahir)
+                                StyledTextField(placeholder: "Nomor Handphone", text: $noTelpon, keyboardType: .phonePad)
+                                
+                                
+                                
+                                
+                                
+                                
+                                
                             }
-                            .toggleStyle(SwitchToggleStyle(tint: .orange))
                             .padding()
-                            .background(Color(red: 66/255, green: 66/255, blue: 66/255))
-                            .cornerRadius(12)
-                            
-                            
-                            StyledTextField(placeholder: "Asal Gereja (bila pindah gereja)", text: $asalGereja)
-                            
-                            StyledTextField(placeholder: "Alasan Pindah Gereja", text: $alasanPindah)
-                            
-                            
+                            .background(CardBackground())
+                            .cornerRadius(16)
+                            .padding(.horizontal)
                         }
-                        .padding()
-                        .background(CardBackground())
-                        .cornerRadius(16)
-                        .padding(.horizontal)
-                    }
-                    .tag(4)
-                    
-                    // STEP 5
-                    ScrollView {
-                        VStack(spacing: 16) {
-
-                           
-                                                     
-                            Text("Status Pernikahan")
-                                .foregroundColor(.white)
-                                .font(.system(size: 14, weight: .medium))
-                            Picker("", selection: $statusPernikahan) {
-                                Text("Belum Menikah").tag("Belum Menikah")
-                                Text("Menikah").tag("Menikah")
+                        .tag(1)
+                        
+                        // STEP 3
+                        ScrollView {
+                            VStack(spacing: 16) {
+                                StyledTextField(placeholder: "Alamat", text: $alamat)
+                                
+                                
                             }
-                            .pickerStyle(SegmentedPickerStyle())
-                            
-                            Text("Status Dalam Keluarga")
-                                .foregroundColor(.white)
-                                .font(.system(size: 14, weight: .medium))
-                            Picker("", selection: $statusKeluarga) {
-                                Text("Kepala").tag("Kepala Keluarga")
-                                Text("Istri").tag("Istri")
-                                Text("Anak").tag("Anak")
-                                Text("Janda").tag("Janda")
-                                Text("Duda").tag("Duda")
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
-                            
-                            StyledTextField(placeholder: "Nama Lengkap Ayah", text: $namaAyah)
-                            
-                            StyledTextField(placeholder: "Nama Lengkap Ibu", text: $namaIbu)
-                            
-                            StyledTextField(placeholder: "Pekerjaan", text: $pekerjaan)
-                            
-                            
-                            Button {
-                                submitUbahProfile()
-                            } label: {
-                                Text("UBAH")
+                            .padding()
+                            .background(CardBackground())
+                            .cornerRadius(16)
+                            .padding(.horizontal)
+                        }
+                        .tag(2)
+                        
+                        // STEP 4
+                        ScrollView {
+                            VStack(spacing: 16) {
+                                
+                                Text("Golongan Darah")
                                     .foregroundColor(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.orange)
-                                    .cornerRadius(12)
-                            }.disabled(isSubmitting)
-                            
-                            
+                                    .font(.system(size: 14, weight: .medium))
+                                Picker("", selection: $golonganDarah) {
+                                    Text("A").tag("A")
+                                    Text("B").tag("B")
+                                    Text("AB").tag("AB")
+                                    Text("O").tag("O")
+                                }
+                                .pickerStyle(SegmentedPickerStyle())
+                                
+                                
+                                Text("Pendidikan Terakhir")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 14, weight: .medium))
+                                StyledRadioButtonOption(title: "SD", selectedOption: $pendidikan)
+                                StyledRadioButtonOption(title: "SMP", selectedOption: $pendidikan)
+                                StyledRadioButtonOption(title: "SMA", selectedOption: $pendidikan)
+                                StyledRadioButtonOption(title: "D1,D2,D3", selectedOption: $pendidikan)
+                                StyledRadioButtonOption(title: "S1", selectedOption: $pendidikan)
+                                StyledRadioButtonOption(title: "S2", selectedOption: $pendidikan)
+                                StyledRadioButtonOption(title: "S3", selectedOption: $pendidikan)
+                            }
+                            .padding()
+                            .background(CardBackground())
+                            .cornerRadius(16)
+                            .padding(.horizontal)
                         }
-                        .padding()
-                        .background(CardBackground())
-                        .cornerRadius(16)
-                        .padding(.horizontal)
+                        .tag(3)
+                        
+                        
+                        // STEP 4
+                        ScrollView {
+                            VStack(spacing: 16) {
+                                
+                                Toggle(isOn: $sudahDibaptis) {
+                                    Text("Sudah Baptis Air?")
+                                        .foregroundColor(.white)
+                                }
+                                .toggleStyle(SwitchToggleStyle(tint: .orange))
+                                .padding()
+                                .background(Color(red: 66/255, green: 66/255, blue: 66/255))
+                                .cornerRadius(12)
+                                
+                                StyledTextField(placeholder: "Gereja Tempat Baptis Air", text: $gerejaBaptis)
+                                
+                                Text("Kapan Baptis Air?")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 14, weight: .medium))
+                                StyledDatePicker(label: "Tanggal Baptis Air", selection: $tanggalBaptisAir)
+                                
+                                Toggle(isOn: $sudahDibaptisRoh) {
+                                    Text("Sudah Baptis Roh Kudus?")
+                                        .foregroundColor(.white)
+                                }
+                                .toggleStyle(SwitchToggleStyle(tint: .orange))
+                                .padding()
+                                .background(Color(red: 66/255, green: 66/255, blue: 66/255))
+                                .cornerRadius(12)
+                                
+                                
+                                StyledTextField(placeholder: "Asal Gereja (bila pindah gereja)", text: $asalGereja)
+                                
+                                StyledTextField(placeholder: "Alasan Pindah Gereja", text: $alasanPindah)
+                                
+                                
+                            }
+                            .padding()
+                            .background(CardBackground())
+                            .cornerRadius(16)
+                            .padding(.horizontal)
+                        }
+                        .tag(4)
+                        
+                        // STEP 5
+                        ScrollView {
+                            VStack(spacing: 16) {
+                                
+                                
+                                
+                                Text("Status Pernikahan")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 14, weight: .medium))
+                                Picker("", selection: $statusPernikahan) {
+                                    Text("Belum Menikah").tag("Belum Menikah")
+                                    Text("Menikah").tag("Menikah")
+                                }
+                                .pickerStyle(SegmentedPickerStyle())
+                                
+                                Text("Status Dalam Keluarga")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 14, weight: .medium))
+                                StyledRadioButtonOption(title: "Kepala Keluarga", selectedOption: $statusKeluarga)
+                                StyledRadioButtonOption(title: "Istri", selectedOption: $statusKeluarga)
+                                StyledRadioButtonOption(title: "Anak", selectedOption: $statusKeluarga)
+                                StyledRadioButtonOption(title: "Janda", selectedOption: $statusKeluarga)
+                                StyledRadioButtonOption(title: "Duda", selectedOption: $statusKeluarga)
+                                
+                                if statusKeluarga == "Kepala Keluarga" {
+                                    StyledTextField(placeholder: "Nama Istri", text: $namaIstri)
+                                }
+                                
+                                if (statusKeluarga == "Kepala Keluarga" || statusKeluarga == "Istri") {
+                                    StyledTextField(placeholder: "Nama Anak", text: $namaAnak)
+                                }
+                                
+                                if statusKeluarga == "Istri" {
+                                    StyledTextField(placeholder: "Nama Suami", text: $namaSuami)
+                                }
+                                
+                                if statusKeluarga == "Anak" {
+                                    StyledTextField(placeholder: "Nama Saudara", text: $namaSaudara)
+                                }
+
+                                
+                                StyledTextField(placeholder: "Nama Lengkap Ayah", text: $namaAyah)
+                                
+                                StyledTextField(placeholder: "Nama Lengkap Ibu", text: $namaIbu)
+                                
+                                StyledTextField(placeholder: "Pekerjaan", text: $pekerjaan)
+                                
+                                
+                                Button {
+                                    submitUbahProfile()
+                                } label: {
+                                    Text("UBAH")
+                                        .foregroundColor(.white)
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(Color.orange)
+                                        .cornerRadius(12)
+                                }.disabled(isSubmitting)
+                                
+                                
+                            }
+                            .padding()
+                            .background(CardBackground())
+                            .cornerRadius(16)
+                            .padding(.horizontal)
+                        }
+                        .tag(5)
+                        
                     }
-                    .tag(5)
-                    
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
                 if isLoading {
                     LoadingOverlayView()
                 }
@@ -266,6 +306,8 @@ struct EditProvileView: View {
             self.noTelpon = user.phoneNumber
             self.jenisKelamin = user.gender
             self.tempatLahir = user.placeOfBirth
+            self.namaIstri = user.wifeName
+            self.namaAnak = user.childrenName
             self.tanggalLahir = {
                 let f = DateFormatter()
                 f.dateFormat = "dd MMMM yyyy"
@@ -291,6 +333,8 @@ struct EditProvileView: View {
             self.namaAyah = user.fatherFullName
             self.namaIbu = user.motherFullName
             self.statusKeluarga = user.statusInFamily
+            self.namaSuami = user.husbandName
+            self.namaSaudara = user.siblingsName
 
         }
         .alert("Hi,", isPresented: $showAlert) {
@@ -318,7 +362,9 @@ struct EditProvileView: View {
             !statusPernikahan.isEmpty,
             !namaAyah.isEmpty,
             !namaIbu.isEmpty,
-            !statusKeluarga.isEmpty
+            !statusKeluarga.isEmpty,
+            !(sudahDibaptis && gerejaBaptis.isEmpty),
+            !(!asalGereja.isEmpty && alasanPindah.isEmpty)
         else {
             showAlert = true;
             alertMessage = "Error data kurang lengkap"
@@ -349,6 +395,8 @@ struct EditProvileView: View {
             "bloodType": self.golonganDarah,
             "lastEducation": self.pendidikan,
             "job": self.pekerjaan,
+            "wifeName": self.namaIstri,
+            "childrenName" : self.namaAnak,
             "waterBaptism": self.sudahDibaptis ? true : false,
             "waterBaptisteryChurch": self.gerejaBaptis,
             "holySpiritBaptism": self.sudahDibaptisRoh ? true : false,
@@ -357,7 +405,9 @@ struct EditProvileView: View {
             "married": self.statusPernikahan == "Belum Menikah" ? false : true,
             "fatherFullName": self.namaAyah,
             "motherFullName": self.namaIbu,
-            "statusInFamily": self.statusKeluarga
+            "statusInFamily": self.statusKeluarga,
+            "husbandName": self.namaSuami,
+            "siblingsName" : self.namaSaudara
         ]
         
 

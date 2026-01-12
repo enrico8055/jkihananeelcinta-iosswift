@@ -366,7 +366,11 @@ struct HomeView: View {
                             fatherFullName: data["fatherFullName"] as? String ?? "-",
                             motherFullName: data["motherFullName"] as? String ?? "-",
                             statusInFamily: data["statusInFamily"] as? String ?? "-",
-                            profileImageURL: url
+                            childrenName: data["childrenName"] as? String ?? "-",
+                            wifeName: data["wifeName"] as? String ?? "-",
+                            profileImageURL: url,
+                            husbandName: data["husbandName"] as? String ?? "-",
+                            siblingsName: data["siblingsName"] as? String ?? "-"
                         )
 
                         self.users = [user]

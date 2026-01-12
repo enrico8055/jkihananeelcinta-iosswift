@@ -33,7 +33,8 @@ struct AddDoaView: View {
                             }
                             .pickerStyle(SegmentedPickerStyle())
                             
-                            StyledTextField(placeholder: "Isi Doa", text: $prayDesc)
+                            StyledTextAreaView(placeholder: "Isi Doa", text: $prayDesc)
+                                                .padding()
                             
                             Button {
                                 submitPrayerRequest()
