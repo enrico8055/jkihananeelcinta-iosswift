@@ -96,6 +96,76 @@ struct HomeView: View {
                 .padding(.top, 16)
                 
                 
+                //ucapan selamat ulang tahun
+                let result = isBirthday(users: users)
+                if result.isBirthday {
+                    VStack(alignment: .leading, spacing: 12) {
+                        ConfettiView()
+                        // Label
+                        HStack {
+                            Image(systemName: "gift.fill")
+                            
+                        }
+                        .foregroundColor(.black.opacity(0.8))
+
+                        // Judul
+                        Text("Selamat Ulang Tahun! 🎉")
+                            .font(.system(size: 20, weight: .bold, design: .rounded))
+                            .foregroundColor(.black)
+
+                        // Ayat Alkitab
+                        Text("""
+                        “TUHAN memberkati engkau dan melindungi engkau;
+                        TUHAN menyinari engkau dengan wajah-Nya dan memberi engkau kasih karunia.”
+                        
+                        — Bilangan 6:24–26
+                        """)
+                        .font(.system(size: 14))
+                        .foregroundColor(.black.opacity(0.9))
+                        .multilineTextAlignment(.leading)
+                        .lineSpacing(4)
+
+                        // Footer
+                        HStack {
+                            Spacer()
+                            HStack(spacing: 4) {
+                                Text("Tuhan Yesus Memberkati")
+                                Image(systemName: "heart.fill")
+                            }
+                            .font(.system(size: 13, weight: .bold))
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 14)
+                            .background(Color.black.opacity(0.2))
+                            .foregroundColor(.black)
+                            .cornerRadius(10)
+                        }
+                        .padding(.top, 4)
+
+                    }
+                    .padding(20)
+                    .background(
+                        LinearGradient(
+                            colors: [
+                                Color(red: 1.0, green: 0.85, blue: 0.4),
+                                Color(red: 1.0, green: 0.65, blue: 0.2)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .cornerRadius(20)
+                    .padding(.horizontal)
+                    .padding(.top, 12)
+                    .shadow(
+                        color: Color.orange.opacity(0.3),
+                        radius: 10,
+                        x: 0,
+                        y: 5
+                    )
+                }
+                
+                
+                
                 // renungan harian
                 if let firstRenungan = renungans.first {
                     VStack(alignment: .leading, spacing: 12) {
@@ -159,6 +229,10 @@ struct HomeView: View {
                         y: 5
                     )
                 }
+                
+                
+                
+
                 
                 
                 // judul pengumuman
@@ -320,6 +394,33 @@ struct HomeView: View {
             fetchAnnouncementData()
             fetchMks()
         }
+    }
+    
+    func isBirthday(users: [User]) -> (isBirthday: Bool, formattedDate: String, todayString: String) {
+        let today = Date()
+        let calendar = Calendar.current
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM yyyy"
+        let todayString = dateFormatter.string(from: today)
+        
+        guard let user = users.first else {
+            return (false, "No user data", todayString)
+        }
+        
+        let birthDateString = user.dateOfBirth
+        
+        guard let birthDate = dateFormatter.date(from: birthDateString) else {
+            return (false, "Invalid date format", todayString)
+        }
+        
+        let todayComponents = calendar.dateComponents([.day, .month], from: today)
+        let birthComponents = calendar.dateComponents([.day, .month], from: birthDate)
+        
+        let isBirthday = (todayComponents.day == birthComponents.day &&
+                         todayComponents.month == birthComponents.month)
+        
+        return (isBirthday, birthDateString, todayString)
     }
     
     //get data user
