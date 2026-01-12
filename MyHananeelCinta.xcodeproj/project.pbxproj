@@ -6,14 +6,24 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9119F2262F0FA9F500478575 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 9119F2252F0FA9F500478575 /* FirebaseAuth */; };
+		9119F2282F0FA9F500478575 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 9119F2272F0FA9F500478575 /* FirebaseAuthCombine-Community */; };
+		9119F22A2F0FA9F500478575 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9119F2292F0FA9F500478575 /* FirebaseCore */; };
+		9119F22C2F0FA9F500478575 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9119F22B2F0FA9F500478575 /* FirebaseDatabase */; };
+		9119F22E2F0FA9F500478575 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 9119F22D2F0FA9F500478575 /* FirebaseFirestore */; };
+		9119F2302F0FA9F500478575 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 9119F22F2F0FA9F500478575 /* FirebaseMessaging */; };
+		9119F2322F0FA9F500478575 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9119F2312F0FA9F500478575 /* FirebaseStorage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		91DEEE482F0E8B66004F31F8 /* 01project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 01project.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		91DEEE482F0E8B66004F31F8 /* MyHananeelCinta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyHananeelCinta.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		91DEEE4A2F0E8B66004F31F8 /* 01project */ = {
+		91DEEE4A2F0E8B66004F31F8 /* MyHananeelCinta */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = 01project;
+			path = MyHananeelCinta;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +33,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9119F2302F0FA9F500478575 /* FirebaseMessaging in Frameworks */,
+				9119F2262F0FA9F500478575 /* FirebaseAuth in Frameworks */,
+				9119F22A2F0FA9F500478575 /* FirebaseCore in Frameworks */,
+				9119F22C2F0FA9F500478575 /* FirebaseDatabase in Frameworks */,
+				9119F2322F0FA9F500478575 /* FirebaseStorage in Frameworks */,
+				9119F22E2F0FA9F500478575 /* FirebaseFirestore in Frameworks */,
+				9119F2282F0FA9F500478575 /* FirebaseAuthCombine-Community in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,7 +49,7 @@
 		91DEEE3F2F0E8B65004F31F8 = {
 			isa = PBXGroup;
 			children = (
-				91DEEE4A2F0E8B66004F31F8 /* 01project */,
+				91DEEE4A2F0E8B66004F31F8 /* MyHananeelCinta */,
 				91DEEE492F0E8B66004F31F8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -40,7 +57,7 @@
 		91DEEE492F0E8B66004F31F8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				91DEEE482F0E8B66004F31F8 /* 01project.app */,
+				91DEEE482F0E8B66004F31F8 /* MyHananeelCinta.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +65,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		91DEEE472F0E8B66004F31F8 /* 01project */ = {
+		91DEEE472F0E8B66004F31F8 /* MyHananeelCinta */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 91DEEE532F0E8B67004F31F8 /* Build configuration list for PBXNativeTarget "01project" */;
+			buildConfigurationList = 91DEEE532F0E8B67004F31F8 /* Build configuration list for PBXNativeTarget "MyHananeelCinta" */;
 			buildPhases = (
 				91DEEE442F0E8B66004F31F8 /* Sources */,
 				91DEEE452F0E8B66004F31F8 /* Frameworks */,
@@ -61,13 +78,20 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				91DEEE4A2F0E8B66004F31F8 /* 01project */,
+				91DEEE4A2F0E8B66004F31F8 /* MyHananeelCinta */,
 			);
-			name = 01project;
+			name = MyHananeelCinta;
 			packageProductDependencies = (
+				9119F2252F0FA9F500478575 /* FirebaseAuth */,
+				9119F2272F0FA9F500478575 /* FirebaseAuthCombine-Community */,
+				9119F2292F0FA9F500478575 /* FirebaseCore */,
+				9119F22B2F0FA9F500478575 /* FirebaseDatabase */,
+				9119F22D2F0FA9F500478575 /* FirebaseFirestore */,
+				9119F22F2F0FA9F500478575 /* FirebaseMessaging */,
+				9119F2312F0FA9F500478575 /* FirebaseStorage */,
 			);
 			productName = 01project;
-			productReference = 91DEEE482F0E8B66004F31F8 /* 01project.app */;
+			productReference = 91DEEE482F0E8B66004F31F8 /* MyHananeelCinta.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -85,7 +109,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 91DEEE432F0E8B66004F31F8 /* Build configuration list for PBXProject "01project" */;
+			buildConfigurationList = 91DEEE432F0E8B66004F31F8 /* Build configuration list for PBXProject "MyHananeelCinta" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -94,12 +118,15 @@
 			);
 			mainGroup = 91DEEE3F2F0E8B65004F31F8;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9119F2242F0FA9F500478575 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 91DEEE492F0E8B66004F31F8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				91DEEE472F0E8B66004F31F8 /* 01project */,
+				91DEEE472F0E8B66004F31F8 /* MyHananeelCinta */,
 			);
 		};
 /* End PBXProject section */
@@ -250,6 +277,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -258,14 +286,13 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.01project.-1project";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hananeelcinta.MyHananeelCinta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -288,10 +315,23 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XF5S8CZ6ZR;
 				ENABLE_APP_SANDBOX = YES;
+				ENABLE_FILE_ACCESS_PICTURE_FOLDER = readwrite;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = NO;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.reference";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -300,14 +340,13 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.01project.-1project";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hananeelcinta.MyHananeelCinta;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -326,7 +365,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		91DEEE432F0E8B66004F31F8 /* Build configuration list for PBXProject "01project" */ = {
+		91DEEE432F0E8B66004F31F8 /* Build configuration list for PBXProject "MyHananeelCinta" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				91DEEE512F0E8B67004F31F8 /* Debug */,
@@ -335,7 +374,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		91DEEE532F0E8B67004F31F8 /* Build configuration list for PBXNativeTarget "01project" */ = {
+		91DEEE532F0E8B67004F31F8 /* Build configuration list for PBXNativeTarget "MyHananeelCinta" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				91DEEE542F0E8B67004F31F8 /* Debug */,
@@ -345,6 +384,55 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9119F2242F0FA9F500478575 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9119F2252F0FA9F500478575 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9119F2242F0FA9F500478575 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		9119F2272F0FA9F500478575 /* FirebaseAuthCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9119F2242F0FA9F500478575 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAuthCombine-Community";
+		};
+		9119F2292F0FA9F500478575 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9119F2242F0FA9F500478575 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		9119F22B2F0FA9F500478575 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9119F2242F0FA9F500478575 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		9119F22D2F0FA9F500478575 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9119F2242F0FA9F500478575 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		9119F22F2F0FA9F500478575 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9119F2242F0FA9F500478575 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		9119F2312F0FA9F500478575 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9119F2242F0FA9F500478575 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 91DEEE402F0E8B66004F31F8 /* Project object */;
 }
