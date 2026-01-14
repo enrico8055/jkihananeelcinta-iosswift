@@ -6,11 +6,14 @@ struct StyledTextField: View {
     @Binding var text: String
     var keyboardType: UIKeyboardType = .default
     var isDisabled: Bool = false
+    var isOnlyField: Bool = false
     
     var body: some View {
-        Text(placeholder)
-            .foregroundColor(.white)
-            .font(.system(size: 14, weight: .medium))
+        if(!isOnlyField){
+            Text(placeholder)
+                .foregroundColor(.white)
+                .font(.system(size: 14, weight: .medium))
+        }
         TextField("", text: $text, prompt: Text(placeholder).foregroundColor(.white.opacity(0.5)))
             .keyboardType(keyboardType)
             .padding(.vertical, 12)

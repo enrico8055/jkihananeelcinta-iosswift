@@ -123,7 +123,8 @@ struct EditProvileView: View {
                         // STEP 3
                         ScrollView {
                             VStack(spacing: 16) {
-                                StyledTextField(placeholder: "Alamat", text: $alamat)
+                                StyledTextAreaView(placeholder: "Alamat", text: $alamat)
+                                                    .padding()
                                 
                                 
                             }
@@ -160,6 +161,7 @@ struct EditProvileView: View {
                                 StyledRadioButtonOption(title: "S1", selectedOption: $pendidikan)
                                 StyledRadioButtonOption(title: "S2", selectedOption: $pendidikan)
                                 StyledRadioButtonOption(title: "S3", selectedOption: $pendidikan)
+                                StyledTextField(placeholder: "Lainnya", text: $pendidikan, isOnlyField: true)
                             }
                             .padding()
                             .background(CardBackground())
@@ -257,7 +259,14 @@ struct EditProvileView: View {
                                 
                                 StyledTextField(placeholder: "Nama Lengkap Ibu", text: $namaIbu)
                                 
-                                StyledTextField(placeholder: "Pekerjaan", text: $pekerjaan)
+                                Text("Pekerjaan")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 14, weight: .medium))
+                                StyledRadioButtonOption(title: "Pegawai Swasta", selectedOption: $pekerjaan)
+                                StyledRadioButtonOption(title: "Pegawai Negeri Sipil", selectedOption: $pekerjaan)
+                                StyledRadioButtonOption(title: "Profesi (Dokter, Pengacara, dll)", selectedOption: $pekerjaan)
+                                StyledRadioButtonOption(title: "Fulltimer Pelayanan", selectedOption: $pekerjaan)
+                                StyledTextField(placeholder: "Lainnya", text: $pekerjaan, isOnlyField: true)
                                 
                                 
                                 Button {
@@ -344,32 +353,114 @@ struct EditProvileView: View {
         }
     }
     
+    func validasi(_ message: String) {
+        showAlert = true
+        alertMessage = message
+        isSubmitting = false
+        isLoading = false
+    }
+    
     func submitUbahProfile() {
         isLoading = true
         isSubmitting = true
         
-        guard
-            !email.isEmpty,
-            !nama.isEmpty,
-            !username.isEmpty,
-            !noTelpon.isEmpty,
-            !jenisKelamin.isEmpty,
-            !tempatLahir.isEmpty,
-            !alamat.isEmpty,
-            !golonganDarah.isEmpty,
-            !pendidikan.isEmpty,
-            !pekerjaan.isEmpty,
-            !statusPernikahan.isEmpty,
-            !namaAyah.isEmpty,
-            !namaIbu.isEmpty,
-            !statusKeluarga.isEmpty,
-            !(sudahDibaptis && gerejaBaptis.isEmpty),
-            !(!asalGereja.isEmpty && alasanPindah.isEmpty)
-        else {
-            showAlert = true;
-            alertMessage = "Error data kurang lengkap"
-            isSubmitting = false
-            isLoading = false
+        if email.isEmpty {
+            validasi("Email tidak boleh kosong")
+            return
+        }
+
+        if nama.isEmpty {
+            validasi("Nama lengkap wajib diisi")
+            return
+        }
+
+        if username.isEmpty {
+            validasi("Username wajib diisi")
+            return
+        }
+
+        if noTelpon.isEmpty {
+            validasi("Nomor telepon wajib diisi")
+            return
+        }
+        
+        if noTelpon.hasPrefix("+") {
+            let numberPart = String(noTelpon.dropFirst())
+
+            if numberPart.isEmpty || !numberPart.allSatisfy({ $0.isNumber }) {
+                validasi("Nomor telepon hanya boleh berisi angka dan satu tanda '+' di depan")
+                return
+            }
+        } else {
+            if !noTelpon.allSatisfy({ $0.isNumber }) {
+                validasi("Nomor telepon hanya boleh berisi angka")
+                return
+            }
+        }
+
+
+        if noTelpon.count > 16 {
+            validasi("Nomor telepon maksimal 16 digit")
+            return
+        }
+
+        if jenisKelamin.isEmpty {
+            validasi("Jenis kelamin wajib dipilih")
+            return
+        }
+
+        if tempatLahir.isEmpty {
+            validasi("Tempat lahir wajib diisi")
+            return
+        }
+
+        if alamat.isEmpty {
+            validasi("Alamat wajib diisi")
+            return
+        }
+
+        if golonganDarah.isEmpty {
+            validasi("Golongan darah wajib dipilih")
+            return
+        }
+
+        if pendidikan.isEmpty {
+            validasi("Pendidikan terakhir wajib diisi")
+            return
+        }
+
+        if pekerjaan.isEmpty {
+            validasi("Pekerjaan wajib diisi")
+            return
+        }
+
+        if statusPernikahan.isEmpty {
+            validasi("Status pernikahan wajib dipilih")
+            return
+        }
+
+        if namaAyah.isEmpty {
+            validasi("Nama ayah wajib diisi")
+            return
+        }
+
+        if namaIbu.isEmpty {
+            validasi("Nama ibu wajib diisi")
+            return
+        }
+
+        if statusKeluarga.isEmpty {
+            validasi("Status dalam keluarga wajib dipilih")
+            return
+        }
+
+        if sudahDibaptis && gerejaBaptis.isEmpty {
+            validasi("Nama gereja baptis wajib diisi")
+            return
+        }
+
+        if !asalGereja.isEmpty && alasanPindah.isEmpty {
+            validasi("Alasan pindah gereja wajib diisi")
             return
         }
         
@@ -386,7 +477,9 @@ struct EditProvileView: View {
         let updateData: [String: Any] = [
             "fullName": self.nama,
             "username": self.username,
-            "phoneNumber": self.noTelpon,
+            "phoneNumber": self.noTelpon.hasPrefix("0")
+                ? "+62" + String(self.noTelpon.dropFirst())
+                : self.noTelpon,
             "gender": self.jenisKelamin,
             "placeOfBirth": self.tempatLahir,
             "dateOfBirth": tanggalLahirStr,

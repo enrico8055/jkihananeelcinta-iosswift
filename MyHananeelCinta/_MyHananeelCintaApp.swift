@@ -1,20 +1,31 @@
 import SwiftUI
 import Firebase
 import FirebaseAuth
+import FirebaseMessaging
+import UserNotifications
 
 @main
 struct _MyHananeelCintaApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
     @State private var showSplash: Bool = true
-    
+
     init() {
         FirebaseApp.configure()
+
+        Messaging.messaging().delegate = MessagingDelegateHandler.shared
+
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            print("Permission granted:", granted)
+        }
+
+        UIApplication.shared.registerForRemoteNotifications()
     }
-    
+
     var body: some Scene {
         WindowGroup {
             ZStack {
-                
+
                 Group {
                     if isLoggedIn {
                         ContentView()
@@ -26,7 +37,7 @@ struct _MyHananeelCintaApp: App {
                     }
                 }
                 .opacity(showSplash ? 0 : 1)
-                
+
                 if showSplash {
                     ZStack {
                         LinearGradient(
@@ -38,10 +49,10 @@ struct _MyHananeelCintaApp: App {
                             endPoint: .bottom
                         )
                         .ignoresSafeArea()
-                        
+
                         VStack(spacing: 16) {
                             Spacer()
-                            
+
                             Image("AppLogo")
                                 .resizable()
                                 .scaledToFit()
@@ -50,18 +61,18 @@ struct _MyHananeelCintaApp: App {
                                 .shadow(color: .black.opacity(0.4), radius: 10, y: 5)
                                 .scaleEffect(showSplash ? 1 : 0.85)
                                 .opacity(showSplash ? 1 : 0)
-                            
+
                             Text("My Hananeel Cinta")
                                 .foregroundColor(.orange)
                                 .font(.system(size: 26, weight: .bold))
                                 .opacity(showSplash ? 1 : 0)
-                            
+
                             Spacer()
-                            
+
                             VStack(spacing: 6) {
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: .orange))
-                                
+
                                 Text("Version 1.0.0.0")
                                     .foregroundColor(.orange.opacity(0.8))
                                     .font(.footnote)
@@ -70,7 +81,7 @@ struct _MyHananeelCintaApp: App {
                         }
                         .transition(.opacity)
                     }
-                    .zIndex(1) 
+                    .zIndex(1)
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
                             withAnimation(.easeInOut(duration: 0.45)) {
@@ -81,5 +92,13 @@ struct _MyHananeelCintaApp: App {
                 }
             }
         }
+    }
+}
+
+class MessagingDelegateHandler: NSObject, MessagingDelegate {
+    static let shared = MessagingDelegateHandler()
+
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        print("FCM Token:", fcmToken ?? "")
     }
 }
