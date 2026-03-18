@@ -14,6 +14,23 @@ struct ListIbadahView: View {
             ]
         ),
         (
+            "figure.2.and.child.holdinghands",
+            "Youth",
+            "Membangkitkan generasi muda yang cinta dan takut akan Tuhan untuk membawa keluar jiwa-jiwa dari dalam kegelapan dan menjadi anak panah Tuhan di akhir jaman",
+            [
+                "Sabtu, 17.00 - 19.00 WIB",
+            ]
+        ),
+        (
+            "figure.child",
+            "Sekolah Minggu ",
+            "Mendidik anak-anak untuk mengenal dan mencintai Tuhan dengan benar dari masa kecilnya, sehingga mempunyai dasar yang kuat",
+            [
+                "Ibadah 1 : Minggu, 07.00 - 09.00 WIB",
+                "Ibadah 2 : Minggu, 10.00 - 12.00 WIB"
+            ]
+        ),
+        (
             "bird.fill",
             "Holy Spirit Night",
             "Memperdalam hubungan pribadi dengan Roh Kudus, sehingga setiap kita mampu berjalan hari demi hari bersama-Nya",
@@ -27,24 +44,9 @@ struct ListIbadahView: View {
             "Memelihara dan memperkuat keluarga kita dalam iman dan pengajaran yang benar tentang Tuhan lewar sharing dan kebersamaan",
             [
             ]
-        ),
-        (
-            "figure.child",
-            "Sekolah Minggu ",
-            "Mendidik anak-anak untuk mengenal dan mencintai Tuhan dengan benar dari masa kecilnya, sehingga mempunyai dasar yang kuat",
-            [
-                "Ibadah 1 : Minggu, 07.00 - 09.00 WIB",
-                "Ibadah 2 : Minggu, 10.00 - 12.00 WIB"
-            ]
-        ),
-        (
-            "figure.2.and.child.holdinghands",
-            "Youth",
-            "Membangkitkan generasi muda yang cinta dan takut akan Tuhan untuk membawa keluar jiwa-jiwa dari dalam kegelapan dan menjadi anak panah Tuhan di akhir jaman",
-            [
-                "Jumat, 19.00 - 21.00 WIB",
-            ]
         )
+        
+        
     ]
 
     var body: some View {
