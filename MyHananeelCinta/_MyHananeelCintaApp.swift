@@ -13,12 +13,16 @@ struct _MyHananeelCintaApp: App {
     init() {
         FirebaseApp.configure()
         Messaging.messaging().delegate = MessagingDelegateHandler.shared
-        UNUserNotificationCenter.current().delegate = NotificationDelegate.shared // tambah ini
+        UNUserNotificationCenter.current().delegate = NotificationDelegate.shared
 
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             print("Permission granted:", granted)
+            if granted {
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
+            }
         }
-        UIApplication.shared.registerForRemoteNotifications()
     }
 
     var body: some Scene {

@@ -1,5 +1,6 @@
 import SwiftUI
 import FirebaseAuth
+import FirebaseMessaging
 
 struct LoginView: View {
     @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
@@ -149,10 +150,35 @@ struct LoginView: View {
                 showError = true
                 return
             }
+            
+            
 
             // LOGIN BERHASIL
             isLoggedIn = true
             userSession = result?.user.email ?? ""
+            
+            
+            //topik email
+            let topic = userSession
+                .replacingOccurrences(of: "@", with: "_")
+                .replacingOccurrences(of: ".", with: "_")
+            
+            Messaging.messaging().subscribe(toTopic: topic) { error in
+                if let error = error {
+                    print("Subscribe error:", error)
+                } else {
+                    print("Subscribed to topic:", topic)
+                }
+            }
+            
+            //topik pastor_message
+            Messaging.messaging().subscribe(toTopic: "pastor_message") { error in
+                if let error = error {
+                    print("Subscribe error:", error)
+                } else {
+                    print("Subscribed to topic: pastor_message")
+                }
+            }
         }
     }
 }
