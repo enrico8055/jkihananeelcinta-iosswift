@@ -331,14 +331,9 @@ struct RegisterView: View {
             validasi("Password tidak boleh kosong")
             return
         }
-        
-        if password !=  passwordKonfirmasi {
-            validasi("Password dan konfirmasi password tidak sama")
-            return
-        }
 
-        if profileImage == nil {
-            validasi("Foto profil wajib diisi")
+        if password != passwordKonfirmasi {
+            validasi("Password dan konfirmasi password tidak sama")
             return
         }
 
@@ -351,80 +346,31 @@ struct RegisterView: View {
             validasi("Username wajib diisi")
             return
         }
-
-        if noTelpon.isEmpty {
-            validasi("Nomor telepon wajib diisi")
-            return
-        }
         
-        if noTelpon.hasPrefix("+") {
-            let numberPart = String(noTelpon.dropFirst())
+        if profileImage == nil {
+            validasi("Foto profil wajib diisi")
+            return
+        }
 
-            if numberPart.isEmpty || !numberPart.allSatisfy({ $0.isNumber }) {
-                validasi("Nomor telepon hanya boleh berisi angka dan satu tanda '+' di depan")
+        if !noTelpon.isEmpty {
+            if noTelpon.hasPrefix("+") {
+                let numberPart = String(noTelpon.dropFirst())
+
+                if numberPart.isEmpty || !numberPart.allSatisfy({ $0.isNumber }) {
+                    validasi("Nomor telepon hanya boleh berisi angka dan satu tanda '+' di depan")
+                    return
+                }
+            } else {
+                if !noTelpon.allSatisfy({ $0.isNumber }) {
+                    validasi("Nomor telepon hanya boleh berisi angka")
+                    return
+                }
+            }
+
+            if noTelpon.count > 16 {
+                validasi("Nomor telepon maksimal 16 digit")
                 return
             }
-        } else {
-            if !noTelpon.allSatisfy({ $0.isNumber }) {
-                validasi("Nomor telepon hanya boleh berisi angka")
-                return
-            }
-        }
-
-
-        if noTelpon.count > 16 {
-            validasi("Nomor telepon maksimal 16 digit")
-            return
-        }
-
-        if jenisKelamin.isEmpty {
-            validasi("Jenis kelamin wajib dipilih")
-            return
-        }
-
-        if tempatLahir.isEmpty {
-            validasi("Tempat lahir wajib diisi")
-            return
-        }
-
-        if alamat.isEmpty {
-            validasi("Alamat wajib diisi")
-            return
-        }
-
-        if golonganDarah.isEmpty {
-            validasi("Golongan darah wajib dipilih")
-            return
-        }
-
-        if pendidikan.isEmpty {
-            validasi("Pendidikan terakhir wajib diisi")
-            return
-        }
-
-        if pekerjaan.isEmpty {
-            validasi("Pekerjaan wajib diisi")
-            return
-        }
-
-        if statusPernikahan.isEmpty {
-            validasi("Status pernikahan wajib dipilih")
-            return
-        }
-
-        if namaAyah.isEmpty {
-            validasi("Nama ayah wajib diisi")
-            return
-        }
-
-        if namaIbu.isEmpty {
-            validasi("Nama ibu wajib diisi")
-            return
-        }
-
-        if statusKeluarga.isEmpty {
-            validasi("Status dalam keluarga wajib dipilih")
-            return
         }
 
         if sudahDibaptis && gerejaBaptis.isEmpty {
