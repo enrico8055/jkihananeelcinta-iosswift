@@ -442,6 +442,15 @@ struct HomeView: View {
 
                 refs.downloadURL { url, error in
                     DispatchQueue.main.async {
+                        
+                        let isDeleted = (data["isDeleted"] as? Bool) ?? (data["isDeleted"] as? String == "true")
+                        if isDeleted {
+                            DispatchQueue.main.async {
+                                isLoading = false
+                                isLoggedIn = false
+                            }
+                            return
+                        }
 
                         let user = User(
                             id: uid,

@@ -1,6 +1,7 @@
 import SwiftUI
 import FirebaseAuth
 import FirebaseMessaging
+import FirebaseDatabase
 
 struct LoginView: View {
     @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
@@ -9,6 +10,7 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showError: Bool = false
+    @State private var errorMsg: String = "Email Atau Password Salah"
     @State private var isPasswordVisible: Bool = false
     
     var body: some View {
@@ -116,7 +118,7 @@ struct LoginView: View {
                 
                 // Error message
                 if showError {
-                    Text("Email atau password salah!")
+                    Text(errorMsg)
                         .foregroundColor(.red)
                         .font(.system(size: 14, weight: .medium))
                 }
@@ -140,43 +142,73 @@ struct LoginView: View {
     
     func handleLogin() {
         guard !email.isEmpty, !password.isEmpty else {
+            errorMsg = "Email Atau Password Salah!"
             showError = true
             return
         }
 
         Auth.auth().signIn(withEmail: email, password: password) { result, error in
             if let error = error {
+                errorMsg = "Email Atau Password Salah!"
                 print("Login error:", error.localizedDescription)
                 showError = true
                 return
             }
-            
-            
 
-            // LOGIN BERHASIL
-            isLoggedIn = true
-            userSession = result?.user.email ?? ""
-            
-            
-            //topik email
-            let topic = userSession
-                .replacingOccurrences(of: "@", with: "_")
-                .replacingOccurrences(of: ".", with: "_")
-            
-            Messaging.messaging().subscribe(toTopic: topic) { error in
-                if let error = error {
-                    print("Subscribe error:", error)
-                } else {
-                    print("Subscribed to topic:", topic)
+            guard let uid = result?.user.uid else { return }
+
+            // cek kalo ada field isDeleted dan true
+            let ref = Database.database().reference().child("users").child(uid)
+            ref.observeSingleEvent(of: .value) { snapshot in
+                if let userData = snapshot.value as? [String: Any],
+                let isDeleted = userData["isDeleted"] as? Bool,
+                isDeleted {
+                    errorMsg = "Gagal login.\nSilahkan hubungi admin!\nadmin@hananeelcinta.id\n"
+                    print("Gagal login. Akun sudah dihapus. Silahkan hubungi admin.")
+                    showError = true
+
+                    do {
+                        try Auth.auth().signOut()
+                    } catch {
+                        print("Logout error:", error.localizedDescription)
+                    }
+
+                    return
                 }
-            }
-            
-            //topik pastor_message
-            Messaging.messaging().subscribe(toTopic: "pastor_message") { error in
-                if let error = error {
-                    print("Subscribe error:", error)
-                } else {
-                    print("Subscribed to topic: pastor_message")
+
+                // LOGIN BERHASIL
+                isLoggedIn = true
+                userSession = result?.user.email ?? ""
+
+                // topik email
+                let topic = userSession
+                    .replacingOccurrences(of: "@", with: "_")
+                    .replacingOccurrences(of: ".", with: "_")
+
+                Messaging.messaging().subscribe(toTopic: topic) { error in
+                    if let error = error {
+                        print("Subscribe error:", error)
+                    } else {
+                        print("Subscribed to topic:", topic)
+                    }
+                }
+
+                // topik pastor_message
+                Messaging.messaging().subscribe(toTopic: "pastor_message") { error in
+                    if let error = error {
+                        print("Subscribe error:", error)
+                    } else {
+                        print("Subscribed to topic: pastor_message")
+                    }
+                }
+                
+                // topik device_ios
+                Messaging.messaging().subscribe(toTopic: "device_ios") { error in
+                    if let error = error {
+                        print("Subscribe error:", error)
+                    } else {
+                        print("Subscribed to topic: device_ios")
+                    }
                 }
             }
         }

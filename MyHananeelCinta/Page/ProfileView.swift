@@ -8,6 +8,7 @@ struct ProfileView: View {
     @State private var showAboutAlert: Bool = false;
     @State private var users: [User] = []
     @State private var isLoading = false
+    @State private var showDeleteConfirmation = false
 
     var body: some View {
         NavigationView {
@@ -164,6 +165,34 @@ struct ProfileView: View {
                                 Divider()
                                     .background(Color.white.opacity(0.15))
                                 
+                                // Tombol Delete
+                                Button {
+                                    // Tampilkan popup konfirmasi
+                                    showDeleteConfirmation = true
+                                } label: {
+                                    HStack {
+                                        Text("Hapus Akun")
+                                            .foregroundColor(.red)
+                                        Spacer()
+                                    }
+                                    .padding()
+                                }
+                                .alert("Konfirmasi Hapus Akun",
+                                    isPresented: $showDeleteConfirmation,
+                                    actions: {
+                                        Button("Batal", role: .cancel) { }
+                                        Button("Hapus Akun", role: .destructive) {
+                                            performDeleteAccount()
+                                        }
+                                    },
+                                    message: {
+                                        Text("""
+                                        Peringatan: Menghapus akun ini akan menghilangkan akses ke My Hananeel Cinta secara permanen.
+                                        Akun tidak dapat dipulihkan.
+                                        Apakah kamu yakin ingin melanjutkan?
+                                        """)
+                                    })
+                                
                                 //logout
                                 Button {
                                     do {
@@ -288,5 +317,46 @@ struct ProfileView: View {
                 .multilineTextAlignment(.trailing)
         }
     }
+    
+    
+    
+    
+    private func performDeleteAccount() {
+            guard let user = Auth.auth().currentUser else { return }
+            let uid = user.uid
+//            let deletedEmail = "deleted_\(uid)@app.local"
+
+            // user.updateEmail(to: deletedEmail) { error in
+            //     if let error = error {
+            //         print("Update email error: \(error.localizedDescription)")
+            //         return
+            //     }
+
+                let updates: [String: Any] = [
+                    "isDeleted": true,
+                    "deletedAt": ServerValue.timestamp()
+                ]
+
+                Database.database().reference()
+                    .child("users")
+                    .child(uid)
+                    .updateChildValues(updates) { error, _ in
+                        if let error = error {
+                            print("DB update error: \(error.localizedDescription)")
+                            return
+                        }
+
+                        do {
+                            try Auth.auth().signOut()
+                            DispatchQueue.main.async {
+                                isLoggedIn = false
+                            }
+                        } catch {
+                            print("Logout error: \(error.localizedDescription)")
+                        }
+                    }
+
+            // } // tutup updateEmail
+        }
 }
 
