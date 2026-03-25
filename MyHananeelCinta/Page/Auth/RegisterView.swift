@@ -410,7 +410,7 @@ struct RegisterView: View {
 
                             ref.observeSingleEvent(of: .value) { snapshot in
                                 let userCount = Int(snapshot.childrenCount)
-                                let nextIndex = userCount + 1
+                                let nextIndex = userCount
                                 let formattedNumber = String(format: "%05d", nextIndex)
                                 let nij = "HC-\(formattedNumber)"
                                 
