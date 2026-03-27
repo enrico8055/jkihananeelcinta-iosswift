@@ -29,12 +29,12 @@ struct ListDoaView: View {
                                 ) {
                                     VStack(alignment: .leading, spacing: 10) {
 
-                                        Text("\(item.prayType) - \(item.date)")
-                                            .font(.system(size: 20, weight: .semibold))
+                                        Text("\(item.date)")
+                                            .font(.system(size: 10, weight: .semibold))
                                             .foregroundColor(.white.opacity(0.6))
 
-                                        Text(item.requesterName)
-                                            .font(.system(size: 15))
+                                        Text(item.prayType)
+                                            .font(.system(size: 20))
                                             .foregroundColor(
                                                 Color(red: 242/255, green: 219/255, blue: 204/255)
                                             )
@@ -45,13 +45,61 @@ struct ListDoaView: View {
                                             .foregroundColor(.white)
                                             .lineLimit(10)
                                             .multilineTextAlignment(.leading)
+                                        
+                                        
+                                        if item.status == "DONE" {
+                                            HStack {
+                                                Spacer()
+                                                Text("Hasil Doa")
+                                                    .font(.system(size: 20))
+                                                    .foregroundColor(
+                                                        Color(red: 242/255, green: 219/255, blue: 204/255)
+                                                    )
+                                                    .lineLimit(10)
+                                                    .multilineTextAlignment(.trailing)
+                                            }
+                                            HStack {
+                                                Spacer()
+                                                Text(item.prayResult)
+                                                    .font(.system(size: 15))
+                                                    .foregroundColor(.white)
+                                                    .lineLimit(10)
+                                                    .multilineTextAlignment(.trailing)
+                                            }
+                                        }
+                                        
+                                        
 
-                                        // status
+                                        //status
+                                        var statusLabel: String {
+                                            switch item.status {
+                                            case "DONE":
+                                                return "SELESAI"
+                                            case "IN_PROGRESS":
+                                                return "DALAM PROSES"
+                                            case "OPEN":
+                                                return "ANTRIAN"
+                                            default:
+                                                return item.status
+                                            }
+                                        }
+                                        var statusColor: Color {
+                                            switch item.status {
+                                            case "DONE": return .green
+                                            case "IN_PROGRESS": return .orange
+                                            case "OPEN": return .blue
+                                            default: return .white.opacity(0.7)
+                                            }
+                                        }
                                         HStack {
                                             Spacer()
-                                            Text(item.status)
-                                                .font(.system(size: 15))
-                                                .foregroundColor(.white.opacity(0.7))
+                                            Text(statusLabel)
+                                                .font(.system(size: 14, weight: .medium))
+                                                .foregroundColor(statusColor)
+                                                .padding(.horizontal, 8)
+                                                .padding(.vertical, 4)
+                                                .background(statusColor.opacity(0.1))
+                                                .cornerRadius(5)
                                         }
                                     }
                                     .padding(16)
@@ -63,7 +111,7 @@ struct ListDoaView: View {
                                         x: 0,
                                         y: 3
                                     )
-                                }
+                                }.allowsHitTesting(false)
                             }
                         }
                         .padding(16)
@@ -153,7 +201,8 @@ struct ListDoaView: View {
                         handlerName: data["handlerName"] as? String ?? "-",
                         prayDesc: data["prayDesc"] as? String ?? "-",
                         requesterId: data["requesterId"] as? String ?? "-",
-                        date: dateString
+                        date: dateString,
+                        prayResult: data["prayResult"] as? String ?? "-"
                     )
                     
                     tempDoas.append(item)

@@ -8,4 +8,5 @@ struct Doa: Identifiable {
     let prayDesc: String
     let requesterId: String
     let date: String
+    let prayResult: String
 }
