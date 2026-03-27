@@ -76,7 +76,7 @@ struct _MyHananeelCintaApp: App {
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: .orange))
 
-                                Text("Version 1.0.0.0")
+                                Text("Version 1.1")
                                     .foregroundColor(.orange.opacity(0.8))
                                     .font(.footnote)
                             }
