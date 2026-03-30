@@ -36,7 +36,7 @@ struct ListRenunganView: View {
                                     // PENULIS (KANAN BAWAH)
                                     HStack {
                                         Spacer()
-                                        Text("Written by: "+item.writer)
+                                        Text("Written By " + (item.writer.isEmpty ? "His Grace" : item.writer))
                                             .font(.system(size: 12))
                                             .foregroundColor(.white.opacity(0.7))
                                     }

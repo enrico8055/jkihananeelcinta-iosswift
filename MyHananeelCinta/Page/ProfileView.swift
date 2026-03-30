@@ -287,7 +287,8 @@ struct ProfileView: View {
                             wifeName: data["wifeName"] as? String ?? "-",
                             profileImageURL: url,
                             husbandName: data["husbandName"] as? String ?? "-",
-                            siblingsName: data["siblingsName"] as? String ?? "-"
+                            siblingsName: data["siblingsName"] as? String ?? "-",
+                            role: data["role"] as? String ?? "Jemaat"
                         )
 
                         self.users = [user]

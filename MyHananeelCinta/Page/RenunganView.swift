@@ -31,7 +31,7 @@ struct RenunganView: View {
                     HStack {
                         Spacer()
 
-                        Text("Written By "+renungan.writer)
+                        Text("Written By " + (renungan.writer.isEmpty ? "His Grace" : renungan.writer))
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundColor(.orange)
                         

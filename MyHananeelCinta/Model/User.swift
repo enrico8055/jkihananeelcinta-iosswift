@@ -28,4 +28,5 @@ struct User: Identifiable {
     var profileImageURL: URL?
     var husbandName: String
     var siblingsName: String
+    var role: String
 }

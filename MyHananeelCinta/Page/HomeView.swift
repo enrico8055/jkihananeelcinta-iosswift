@@ -300,10 +300,17 @@ struct HomeView: View {
                 
                 
                 //button menu
+                let userRole = users.first?.role ?? "Jemaat"
                 let buttons = [
                     "Ibadah", "Permintaan Doa", "Renungan",
-                    "Persembahan"
-                ]
+                    "Persembahan", "Admin"
+                ].filter { title in
+                    if title == "Admin" {
+                        return userRole == "SuperUser"
+                    }
+                    return true
+                }
+                
                 
                 LazyVGrid(
                     columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 3),
@@ -320,6 +327,8 @@ struct HomeView: View {
                                 ListIbadahView(mks:mks)
                             } else if (title == "Permintaan Doa") {
                                 ListDoaView( userName: users.first?.fullName ?? "-")
+                            } else if (title == "Admin") {
+                                HomeAdminView()
                             } else {
                             }
                         } label: {
@@ -332,6 +341,7 @@ struct HomeView: View {
                                     case "Permintaan Doa": return "bird.fill"
                                     case "Renungan": return "book.closed.fill"
                                     case "Persembahan": return "heart.fill"
+                                    case "Admin": return "gearshape.fill"
                                     default: return "leaf.fill"
                                     }
                                 }
@@ -480,7 +490,8 @@ struct HomeView: View {
                             wifeName: data["wifeName"] as? String ?? "-",
                             profileImageURL: url,
                             husbandName: data["husbandName"] as? String ?? "-",
-                            siblingsName: data["siblingsName"] as? String ?? "-"
+                            siblingsName: data["siblingsName"] as? String ?? "-",
+                            role: data["role"] as? String ?? "Jemaat"
                         )
 
                         self.users = [user]
