@@ -157,7 +157,7 @@ struct ProfileView: View {
                                     .alert("Tentang Aplikasi", isPresented: $showAboutAlert) {
                                         Button("OK", role: .cancel) { }
                                     } message: {
-                                        Text("Versi 1.0.0.0\nMy Hananeel Cinta\nDikembangkan oleh Tim JKI Hananeel Cinta")
+                                        Text("MyHananeelCinta\nDikembangkan oleh Tim JKI Hananeel Cinta")
                                     }
                                     
                                 }

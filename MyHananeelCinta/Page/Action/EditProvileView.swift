@@ -1,6 +1,7 @@
 import SwiftUI
 import FirebaseAuth
 import FirebaseDatabase
+import FirebaseStorage
 
 
 struct EditProvileView: View {
@@ -33,6 +34,7 @@ struct EditProvileView: View {
     @State private var statusKeluarga: String = ""
     @State private var namaSuami: String = ""
     let user:User;
+    @State private var profileImage: UIImage? = nil
     @State private var currentPage: Int = 0
     @State private var showAlert: Bool = false;
     @State private var alertMessage: String = "";
@@ -75,6 +77,7 @@ struct EditProvileView: View {
                         // STEP 1
                         ScrollView {
                             VStack(spacing: 16) {
+                                ProfileImagePickerCamera(image: $profileImage)
                                 StyledTextField(placeholder: "NIJ", text: $nij, isDisabled: true)
                                 StyledTextField(placeholder: "Email", text: $email, keyboardType: .emailAddress, isDisabled: true)
                                 StyledTextField(placeholder: "Username", text: $username)
@@ -307,6 +310,8 @@ struct EditProvileView: View {
         }
         .accentColor(.orange)
         .onAppear(){
+            loadCurrentProfileImage()
+            
             //init old data
             self.nij = user.nij;
             self.nama = user.fullName;
@@ -381,6 +386,11 @@ struct EditProvileView: View {
 
         if noTelpon.isEmpty {
             validasi("Nomor telepon wajib diisi")
+            return
+        }
+        
+        if profileImage == nil {
+            validasi("Foto profil wajib diisi")
             return
         }
         
@@ -465,58 +475,123 @@ struct EditProvileView: View {
         }
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        let ref = Database.database().reference()
-
-        let f = DateFormatter()
-        f.dateFormat = "dd MMMM yyyy"
-        f.locale = Locale(identifier: "en_US")
         
-        let tanggalLahirStr = f.string(from: self.tanggalLahir)
-        let tanggalBaptisAirStr = f.string(from: self.tanggalBaptisAir)
-
-        let updateData: [String: Any] = [
-            "fullName": self.nama,
-            "username": self.username,
-            "phoneNumber": self.noTelpon.hasPrefix("0")
-                ? "+62" + String(self.noTelpon.dropFirst())
-                : self.noTelpon,
-            "gender": self.jenisKelamin,
-            "placeOfBirth": self.tempatLahir,
-            "dateOfBirth": tanggalLahirStr,
-            "waterBaptisteryDate": tanggalBaptisAirStr,
-            "address": self.alamat,
-            "bloodType": self.golonganDarah,
-            "lastEducation": self.pendidikan,
-            "job": self.pekerjaan,
-            "wifeName": self.namaIstri,
-            "childrenName" : self.namaAnak,
-            "waterBaptism": self.sudahDibaptis ? true : false,
-            "waterBaptisteryChurch": self.gerejaBaptis,
-            "holySpiritBaptism": self.sudahDibaptisRoh ? true : false,
-            "churchOrigin": self.asalGereja,
-            "reasonToMovingChurch": self.alasanPindah,
-            "married": self.statusPernikahan == "Belum Menikah" ? false : true,
-            "fatherFullName": self.namaAyah,
-            "motherFullName": self.namaIbu,
-            "statusInFamily": self.statusKeluarga,
-            "husbandName": self.namaSuami,
-            "siblingsName" : self.namaSaudara
-        ]
         
+        
+        if let image = profileImage {
+            uploadProfileImage(image: image, userId: uid) { url in
+                if let url = url {
+                    
+                    let ref = Database.database().reference()
+                    let f = DateFormatter()
+                    f.dateFormat = "dd MMMM yyyy"
+                    f.locale = Locale(identifier: "en_US")
+                    
+                    let tanggalLahirStr = f.string(from: self.tanggalLahir)
+                    let tanggalBaptisAirStr = f.string(from: self.tanggalBaptisAir)
+                    
+                    let updateData: [String: Any] = [
+                        "fullName": self.nama,
+                        "username": self.username,
+                        "phoneNumber": self.noTelpon.hasPrefix("0")
+                        ? "+62" + String(self.noTelpon.dropFirst())
+                        : self.noTelpon,
+                        "photoImageUrl": url.path(),
+                        "gender": self.jenisKelamin,
+                        "placeOfBirth": self.tempatLahir,
+                        "dateOfBirth": tanggalLahirStr,
+                        "waterBaptisteryDate": tanggalBaptisAirStr,
+                        "address": self.alamat,
+                        "bloodType": self.golonganDarah,
+                        "lastEducation": self.pendidikan,
+                        "job": self.pekerjaan,
+                        "wifeName": self.namaIstri,
+                        "childrenName" : self.namaAnak,
+                        "waterBaptism": self.sudahDibaptis ? true : false,
+                        "waterBaptisteryChurch": self.gerejaBaptis,
+                        "holySpiritBaptism": self.sudahDibaptisRoh ? true : false,
+                        "churchOrigin": self.asalGereja,
+                        "reasonToMovingChurch": self.alasanPindah,
+                        "married": self.statusPernikahan == "Belum Menikah" ? false : true,
+                        "fatherFullName": self.namaAyah,
+                        "motherFullName": self.namaIbu,
+                        "statusInFamily": self.statusKeluarga,
+                        "husbandName": self.namaSuami,
+                        "siblingsName" : self.namaSaudara
+                    ]
+                    
+                    
+                    ref.child("users").child(uid).updateChildValues(updateData) { error, _ in
+                        DispatchQueue.main.async {
+                            if let error = error {
+                                showAlert = true;
+                                alertMessage = "Gagal submit: \(error.localizedDescription)"
+                                isSubmitting = false
+                                isLoading = false
+                            } else {
+                                showAlert = true;
+                                alertMessage = "Berhasil update profile!"
+                                dismiss()
+                                isLoading = false
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func loadCurrentProfileImage() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
 
-        ref.child("users").child(uid).updateChildValues(updateData) { error, _ in
-            DispatchQueue.main.async {
+        let storageRef = Storage.storage().reference()
+            .child("\(uid)/profile-pictures")
+
+        storageRef.getData(maxSize: 5 * 1024 * 1024) { data, error in
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.profileImage = image
+                }
+            }
+        }
+    }
+        
+    func uploadProfileImage(image: UIImage, userId: String, completion: @escaping (URL?) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+            showAlert = true;
+            alertMessage = "Error convert image ke data"
+            isSubmitting = false
+            completion(nil)
+            isLoading = false
+            return
+        }
+        
+        let storageRef = Storage.storage().reference()
+            .child("\(userId)/profile-pictures")
+        
+        storageRef.putData(imageData, metadata: nil) { metadata, error in
+            if let error = error {
+                showAlert = true;
+                alertMessage = "Error upload image: \(error.localizedDescription)"
+                isSubmitting = false
+                completion(nil)
+                isLoading = false
+                return
+            }
+            
+            // Ambil download URL
+            storageRef.downloadURL { url, error in
                 if let error = error {
                     showAlert = true;
-                    alertMessage = "Gagal submit: \(error.localizedDescription)"
+                    alertMessage = "Error ambil URL: \(error.localizedDescription)"
                     isSubmitting = false
+                    completion(nil)
                     isLoading = false
-                } else {
-                    showAlert = true;
-                    alertMessage = "Berhasil update profile!"
-                    dismiss()
-                    isLoading = false
+                    return
                 }
+                
+                
+                completion(url)
             }
         }
     }

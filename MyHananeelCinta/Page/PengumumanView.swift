@@ -59,9 +59,9 @@ struct PengumumanView: View {
                                     Color(red: 242/255, green: 219/255, blue: 204/255)
                                 )
                         }
-                        .padding()
+                        .padding(.horizontal,32)
                     }
-
+                    .padding(.horizontal, -16) 
 
                     // isi
                     Text(announcement.desc)
@@ -196,7 +196,7 @@ struct PengumumanView: View {
                     
                     
 
-                }
+                }.padding(.horizontal, 16)
             }
             .background(
                 Color(red: 51/255, green: 51/255, blue: 51/255)
@@ -220,10 +220,11 @@ struct PengumumanView: View {
         
         var whatsappNumber = cleanedNumber
         
-        if whatsappNumber.hasPrefix("0") {
+        if whatsappNumber.hasPrefix("62") {
+            whatsappNumber = "+62" + whatsappNumber.dropFirst(2)
+        } else if whatsappNumber.hasPrefix("0") {
             whatsappNumber = "+62" + whatsappNumber.dropFirst()
-        }
-        else if !whatsappNumber.hasPrefix("+") {
+        } else if !whatsappNumber.hasPrefix("62") {
             whatsappNumber = "+62" + whatsappNumber
         }
         
