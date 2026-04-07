@@ -271,18 +271,7 @@ struct EditProvileView: View {
                                 StyledRadioButtonOption(title: "Fulltimer Pelayanan", selectedOption: $pekerjaan)
                                 StyledTextField(placeholder: "Lainnya", text: $pekerjaan, isOnlyField: true)
                                 
-                                
-                                Button {
-                                    submitUbahProfile()
-                                } label: {
-                                    Text("UBAH")
-                                        .foregroundColor(.white)
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.orange)
-                                        .cornerRadius(12)
-                                }.disabled(isSubmitting)
-                                
+                            
                                 
                             }
                             .padding()
@@ -294,6 +283,62 @@ struct EditProvileView: View {
                         
                     }
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    
+                    HStack(spacing: 12) {
+                        if currentPage > 0 {
+                            Button {
+                                withAnimation {
+                                    currentPage -= 1
+                                }
+                            } label: {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "chevron.left")
+                                    Text("Kembali")
+                                }
+                                .foregroundColor(.orange)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.orange, lineWidth: 1.5)
+                                )
+                            }
+                        }
+
+                        if currentPage < 5 {
+                            Button {
+                                withAnimation {
+                                    currentPage += 1
+                                }
+                            } label: {
+                                HStack(spacing: 6) {
+                                    Text("Lanjut")
+                                    Image(systemName: "chevron.right")
+                                }
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.orange)
+                                .cornerRadius(12)
+                            }
+                        }
+                        
+                        if currentPage == 5 {
+                            Button {
+                                submitUbahProfile()
+                            } label: {
+                                Text("UBAH")
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.orange)
+                                    .cornerRadius(12)
+                            }
+                            .disabled(isSubmitting)
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 12)
                 }
                 if isLoading {
                     LoadingOverlayView()

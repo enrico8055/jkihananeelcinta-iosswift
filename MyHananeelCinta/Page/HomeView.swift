@@ -403,6 +403,7 @@ struct HomeView: View {
             fetchRenungans()
             fetchAnnouncementData()
             fetchMks()
+            updateLastOpen()
         }
     }
     
@@ -501,6 +502,18 @@ struct HomeView: View {
                 }
             }
         }
+    }
+    
+    func updateLastOpen() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let lastOpenMillis = Int64(Date().timeIntervalSince1970 * 1000)
+        
+        let ref = Database.database().reference().child("users").child(uid)
+        ref.updateChildValues([
+            "lastOpen": lastOpenMillis,
+            "lastOpenPlatform": "IOS"
+        ])
     }
 
     

@@ -6,6 +6,9 @@ struct StyledSecureField: View {
     @Binding var text: String
     
     var body: some View {
+        Text(placeholder)
+            .foregroundColor(.white)
+            .font(.system(size: 14, weight: .medium))
         SecureField("", text: $text, prompt: Text(placeholder).foregroundColor(.white.opacity(0.5)))
             .padding(.vertical, 12)
             .padding(.horizontal, 8)

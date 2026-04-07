@@ -268,17 +268,6 @@ struct RegisterView: View {
                                 StyledTextField(placeholder: "Lainnya", text: $pekerjaan, isOnlyField: true)
                                 
                                 
-                                Button {
-                                    submitRegister()
-                                } label: {
-                                    Text("DAFTAR")
-                                        .foregroundColor(.white)
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.orange)
-                                        .cornerRadius(12)
-                                }.disabled(isSubmitting)
-                                
                                 
                             }
                             .padding()
@@ -290,6 +279,62 @@ struct RegisterView: View {
                         
                     }
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                    
+                    HStack(spacing: 12) {
+                        if currentPage > 0 {
+                            Button {
+                                withAnimation {
+                                    currentPage -= 1
+                                }
+                            } label: {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "chevron.left")
+                                    Text("Kembali")
+                                }
+                                .foregroundColor(.orange)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.orange, lineWidth: 1.5)
+                                )
+                            }
+                        }
+
+                        if currentPage < 5 {
+                            Button {
+                                withAnimation {
+                                    currentPage += 1
+                                }
+                            } label: {
+                                HStack(spacing: 6) {
+                                    Text("Lanjut")
+                                    Image(systemName: "chevron.right")
+                                }
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.orange)
+                                .cornerRadius(12)
+                            }
+                        }
+                        
+                        if currentPage == 5 {
+                            Button {
+                                submitRegister()
+                            } label: {
+                                Text("DAFTAR")
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.orange)
+                                    .cornerRadius(12)
+                            }
+                            .disabled(isSubmitting)
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 12)
                 }
                 if isLoading {
                     LoadingOverlayView()
@@ -349,6 +394,26 @@ struct RegisterView: View {
         
         if profileImage == nil {
             validasi("Foto profil wajib diisi")
+            return
+        }
+        
+        if pekerjaan.isEmpty {
+            validasi("Pekerjaan wajib diisi")
+            return
+        }
+        
+        if alamat.isEmpty {
+            validasi("Alamat wajib diisi")
+            return
+        }
+        
+        if jenisKelamin.isEmpty {
+            validasi("Jenis kelamin wajib dipilih")
+            return
+        }
+        
+        if pendidikan.isEmpty {
+            validasi("Pendidikan terakhir wajib diisi")
             return
         }
 
