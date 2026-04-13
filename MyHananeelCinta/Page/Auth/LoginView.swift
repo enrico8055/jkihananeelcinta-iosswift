@@ -146,72 +146,83 @@ struct LoginView: View {
             showError = true
             return
         }
+        
+        
+        //cek versi app
+        let ref = Database.database().reference()
+            .child("iosConfig")
+            .child("versions")
+        ref.observeSingleEvent(of: .value) { snapshot, _ in
 
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
-            if let error = error {
-                errorMsg = "Email Atau Password Salah!"
-                print("Login error:", error.localizedDescription)
+            guard let data = snapshot.value as? [String: Any] else { return }
+
+            let versionKey = "v" + Constants.versiApp
+                .replacingOccurrences(of: ".", with: "_")
+
+            let isAllowed = data[versionKey] as? Bool ?? false
+
+            if !isAllowed {
+                errorMsg = "Login Gagal, Silahkan Update Ke App Versi Terbaru"
+                print("Login error:", "Silahkan Update Ke App Versi Terbaru")
                 showError = true
                 return
-            }
-
-            guard let uid = result?.user.uid else { return }
-
-            // cek kalo ada field isDeleted dan true
-            let ref = Database.database().reference().child("users").child(uid)
-            ref.observeSingleEvent(of: .value) { snapshot in
-                if let userData = snapshot.value as? [String: Any],
-                let isDeleted = userData["isDeleted"] as? Bool,
-                isDeleted {
-                    errorMsg = "Gagal login.\nSilahkan hubungi admin!\nadmin@hananeelcinta.id\n"
-                    print("Gagal login. Akun sudah dihapus. Silahkan hubungi admin.")
-                    showError = true
-
-                    do {
-                        try Auth.auth().signOut()
-                    } catch {
-                        print("Logout error:", error.localizedDescription)
+            }else{
+                //auth
+                Auth.auth().signIn(withEmail: email, password: password) { result, error in
+                    if let error = error {
+                        errorMsg = "Email Atau Password Salah!"
+                        print("Login error:", error.localizedDescription)
+                        showError = true
+                        return
                     }
 
-                    return
-                }
+                    guard let uid = result?.user.uid else { return }
 
-                // LOGIN BERHASIL
-                isLoggedIn = true
-                userSession = result?.user.email ?? ""
+                    // cek kalo ada field isDeleted dan true
+                    let ref = Database.database().reference().child("users").child(uid)
+                    ref.observeSingleEvent(of: .value) { snapshot in
+                        if let userData = snapshot.value as? [String: Any],
+                        let isDeleted = userData["isDeleted"] as? Bool,
+                        isDeleted {
+                            errorMsg = "Gagal login.\nSilahkan hubungi admin!\nadmin@hananeelcinta.id\n"
+                            print("Gagal login. Akun sudah dihapus. Silahkan hubungi admin.")
+                            showError = true
 
-                // topik email
-                let topic = userSession
-                    .replacingOccurrences(of: "@", with: "_")
-                    .replacingOccurrences(of: ".", with: "_")
+                            do {
+                                try Auth.auth().signOut()
+                            } catch {
+                                print("Logout error:", error.localizedDescription)
+                            }
 
-                Messaging.messaging().subscribe(toTopic: topic) { error in
-                    if let error = error {
-                        print("Subscribe error:", error)
-                    } else {
-                        print("Subscribed to topic:", topic)
-                    }
-                }
+                            return
+                        }
 
-                // topik pastor_message
-                Messaging.messaging().subscribe(toTopic: "pastor_message") { error in
-                    if let error = error {
-                        print("Subscribe error:", error)
-                    } else {
-                        print("Subscribed to topic: pastor_message")
-                    }
-                }
-                
-                // topik device_ios
-                Messaging.messaging().subscribe(toTopic: "device_ios") { error in
-                    if let error = error {
-                        print("Subscribe error:", error)
-                    } else {
-                        print("Subscribed to topic: device_ios")
+                        // LOGIN BERHASIL
+                        isLoggedIn = true
+                        userSession = result?.user.email ?? ""
+
+                        // topik email
+                        let topic = userSession
+                            .replacingOccurrences(of: "@", with: "_")
+                            .replacingOccurrences(of: ".", with: "_")
+
+                        Messaging.messaging().subscribe(toTopic: topic) { error in
+                            if let error = error {
+                                print("Subscribe error:", error)
+                            } else {
+                                print("Subscribed to topic:", topic)
+                            }
+                        }
+                        
+
+                        
                     }
                 }
             }
         }
+
+        
+        
     }
 }
 

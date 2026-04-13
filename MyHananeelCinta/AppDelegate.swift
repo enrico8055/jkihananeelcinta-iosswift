@@ -1,6 +1,8 @@
 import UIKit
 import FirebaseMessaging
 import UserNotifications
+import FirebaseDatabase
+import FirebaseAuth
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
 
@@ -24,8 +26,44 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         Messaging.messaging().apnsToken = deviceToken
         print("APNS token received")
         Messaging.messaging().token { token, error in
-            print("FCM Token:", token ?? "")
+            
+            guard let token = token else { return }
+            print("FCM Token:", token)
+            self.saveFCMToken(token)
+            
         }
+        
+        // topik pastor_message
+        Messaging.messaging().subscribe(toTopic: "pastor_message") { error in
+            if let error = error {
+                print("Subscribe error:", error)
+            } else {
+                print("Subscribed to topic: pastor_message")
+            }
+        }
+        
+        // topik device_ios
+        Messaging.messaging().subscribe(toTopic: "device_ios") { error in
+            if let error = error {
+                print("Subscribe error:", error)
+            } else {
+                print("Subscribed to topic: device_ios")
+            }
+        }
+    }
+    
+    func saveFCMToken(_ token: String) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("No user logged in yet")
+            return
+        }
+
+        Database.database().reference()
+            .child("users")
+            .child(uid)
+            .updateChildValues([
+                "fcmToken": token
+            ])
     }
 
     func application(_ application: UIApplication,

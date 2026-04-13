@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct PersembahanView: View {
+    @State private var showCopiedAlert = false
+    
     var body: some View {
         NavigationView {
             ScrollView {
@@ -58,10 +60,16 @@ struct PersembahanView: View {
 
                             Button {
                                 UIPasteboard.general.string = "0033133313"
+                                showCopiedAlert = true
                             } label: {
                                 Image(systemName: "doc.on.doc")
                                     .font(.system(size: 18))
                                     .foregroundColor(.orange)
+                            }
+                            .alert("Berhasil", isPresented: $showCopiedAlert) {
+                                Button("OK", role: .cancel) { }
+                            } message: {
+                                Text("Nomor berhasil disalin")
                             }
                         }
 

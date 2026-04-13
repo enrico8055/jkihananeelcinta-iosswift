@@ -3,6 +3,7 @@ import SwiftUI
 import FirebaseDatabase
 import FirebaseAuth
 import FirebaseStorage
+import FirebaseMessaging
 
 struct HomeView: View {
     @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
@@ -96,138 +97,168 @@ struct HomeView: View {
                 .padding(.top, 16)
                 
                 
-                //ucapan selamat ulang tahun
+                // UCAPAN ULANG TAHUN
                 let result = isBirthday(users: users)
+
                 if result.isBirthday {
-                    VStack(alignment: .leading, spacing: 12) {
+
+                    VStack(alignment: .leading, spacing: 14) {
+
+                        // CONFETTI (di atas, biar tidak ganggu layout)
                         ConfettiView()
-                        // Label
-                        HStack {
+
+                        // HEADER ICON
+                        HStack(spacing: 6) {
                             Image(systemName: "gift.fill")
-                            
+                                .font(.system(size: 12))
+
+                            Text("SPECIAL DAY")
+                                .font(.system(size: 11, weight: .semibold))
+                                .kerning(1.5)
                         }
-                        .foregroundColor(.black.opacity(0.8))
+                        .foregroundColor(.white.opacity(0.9))
 
-                        // Judul
-                        Text("Selamat Ulang Tahun! 🎉")
-                            .font(.system(size: 20, weight: .bold, design: .rounded))
-                            .foregroundColor(.black)
+                        // TITLE
+                        Text("Selamat Ulang Tahun 🎉")
+                            .font(.system(size: 22, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.leading)
 
-                        // Ayat Alkitab
+                        // VERSE / MESSAGE
                         Text("""
                         “TUHAN memberkati engkau dan melindungi engkau;
                         TUHAN menyinari engkau dengan wajah-Nya dan memberi engkau kasih karunia.”
-                        
+
                         — Bilangan 6:24–26
                         """)
                         .font(.system(size: 14))
-                        .foregroundColor(.black.opacity(0.9))
-                        .multilineTextAlignment(.leading)
+                        .foregroundColor(.white.opacity(0.85))
                         .lineSpacing(4)
+                        .multilineTextAlignment(.leading)
 
-                        // Footer
+                        // FOOTER
                         HStack {
                             Spacer()
-                            HStack(spacing: 4) {
-                                Text("Tuhan Yesus Memberkati")
+
+                            HStack(spacing: 6) {
+                                Text("God bless you")
+                                    .fontWeight(.semibold)
+
                                 Image(systemName: "heart.fill")
+                                    .font(.system(size: 12))
                             }
-                            .font(.system(size: 13, weight: .bold))
+                            .font(.system(size: 13))
+                            .foregroundColor(.white)
                             .padding(.vertical, 8)
                             .padding(.horizontal, 14)
-                            .background(Color.black.opacity(0.2))
-                            .foregroundColor(.black)
+                            .background(.white.opacity(0.15))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.white.opacity(0.25), lineWidth: 1)
+                            )
                             .cornerRadius(10)
                         }
-                        .padding(.top, 4)
-
                     }
-                    .padding(20)
+                    .padding(18)
                     .background(
-                        LinearGradient(
-                            colors: [
-                                Color(red: 1.0, green: 0.85, blue: 0.4),
-                                Color(red: 1.0, green: 0.65, blue: 0.2)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
+                        ZStack {
+                            LinearGradient(
+                                colors: [
+                                    Color.orange.opacity(0.95),
+                                    Color.orange.opacity(0.65)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+
+                            // soft glow effect biar premium
+                            Color.white.opacity(0.06)
+                                .blur(radius: 12)
+                        }
                     )
-                    .cornerRadius(20)
+                    .cornerRadius(22)
                     .padding(.horizontal)
                     .padding(.top, 12)
-                    .shadow(
-                        color: Color.orange.opacity(0.3),
-                        radius: 10,
-                        x: 0,
-                        y: 5
-                    )
+                    .shadow(color: .black.opacity(0.15), radius: 12, x: 0, y: 6)
                 }
                 
                 
                 
-                // renungan harian
+                // RENUNGAN HARIAN (IMPROVED DESIGN)
                 if let firstRenungan = renungans.first {
-                    VStack(alignment: .leading, spacing: 12) {
-                        // Label Kecil di Atas
-                        HStack {
+
+                    VStack(alignment: .leading, spacing: 14) {
+
+                        // HEADER LABEL
+                        HStack(spacing: 6) {
                             Image(systemName: "sun.max.fill")
+                                .font(.system(size: 12))
                             Text("RENUNGAN HARIAN")
-                                .font(.system(size: 10, weight: .bold))
-                                .kerning(1.2)
+                                .font(.system(size: 11, weight: .semibold))
+                                .kerning(1.5)
                         }
-                        .foregroundColor(.black.opacity(0.8))
-                        
-                        // Judul
+                        .foregroundColor(.white.opacity(0.9))
+
+                        // TITLE
                         Text(firstRenungan.title)
-                            .font(.system(size: 20, weight: .bold, design: .rounded))
-                            .foregroundColor(.black)
-                            .lineLimit(1)
-                    
-                        // Ayat / isi teks
-                        Text(String(firstRenungan.messages.prefix(200)) + "...")
+                            .font(.system(size: 22, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .lineLimit(2)
+
+                        // CONTENT PREVIEW
+                        Text(firstRenungan.messages)
                             .font(.system(size: 14))
-                            .foregroundColor(.black.opacity(0.9))
+                            .foregroundColor(.white.opacity(0.85))
                             .lineLimit(3)
-                            .multilineTextAlignment(.leading)
                             .lineSpacing(4)
-                        
-                        // Footer (Tombol Baca)
+                            .multilineTextAlignment(.leading)
+
+                        // BUTTON
                         HStack {
                             Spacer()
-                            
+
                             NavigationLink(destination: RenunganView(renungan: firstRenungan)) {
-                                HStack(spacing: 4) {
+                                HStack(spacing: 6) {
                                     Text("Baca Selengkapnya")
-                                    Image(systemName: "chevron.right")
+                                        .fontWeight(.semibold)
+
+                                    Image(systemName: "arrow.right")
+                                        .font(.system(size: 12))
                                 }
-                                .font(.system(size: 13, weight: .bold))
+                                .font(.system(size: 13))
+                                .foregroundColor(.white)
                                 .padding(.vertical, 8)
                                 .padding(.horizontal, 14)
-                                .background(Color.black.opacity(0.2))
-                                .foregroundColor(.black)
+                                .background(.white.opacity(0.15))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .stroke(Color.white.opacity(0.25), lineWidth: 1)
+                                )
                                 .cornerRadius(10)
                             }
                         }
-                        .padding(.top, 4)
                     }
-                    .padding(20)
+                    .padding(18)
                     .background(
-                        LinearGradient(
-                            colors: [.orange, Color(red: 1.0, green: 0.55, blue: 0.0)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
+                        ZStack {
+                            LinearGradient(
+                                colors: [
+                                    Color.orange.opacity(0.9),
+                                    Color.orange.opacity(0.6)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+
+                            // subtle glass effect
+                            Color.white.opacity(0.05)
+                                .blur(radius: 10)
+                        }
                     )
-                    .cornerRadius(20)
+                    .cornerRadius(22)
                     .padding(.horizontal)
                     .padding(.top, 12)
-                    .shadow(
-                        color: Color.orange.opacity(0.3),
-                        radius: 10,
-                        x: 0,
-                        y: 5
-                    )
+                    .shadow(color: .black.opacity(0.15), radius: 12, x: 0, y: 6)
                 }
                 
                 
@@ -399,6 +430,7 @@ struct HomeView: View {
             }
             
         }.onAppear(){
+            checkAppVersionAndForceLogout()
             fetchUserData()
             fetchRenungans()
             fetchAnnouncementData()
@@ -432,6 +464,28 @@ struct HomeView: View {
                          todayComponents.month == birthComponents.month)
         
         return (isBirthday, birthDateString, todayString)
+    }
+    
+    
+    func checkAppVersionAndForceLogout() {
+
+        let ref = Database.database().reference()
+            .child("iosConfig")
+            .child("versions")
+
+        ref.observeSingleEvent(of: .value) { snapshot, _ in
+
+            guard let data = snapshot.value as? [String: Any] else { return }
+
+            let versionKey = "v" + Constants.versiApp
+                .replacingOccurrences(of: ".", with: "_")
+
+            let isAllowed = data[versionKey] as? Bool ?? false
+
+            if !isAllowed {
+                isLoggedIn = false
+            }
+        }
     }
     
     //get data user
@@ -494,6 +548,16 @@ struct HomeView: View {
                             siblingsName: data["siblingsName"] as? String ?? "-",
                             role: data["role"] as? String ?? "Jemaat"
                         )
+                        
+                        // topik email
+
+                        Messaging.messaging().subscribe(toTopic: user.role) { error in
+                            if let error = error {
+                                print("Subscribe error:", error)
+                            } else {
+                                print("Subscribed to topic:", user.role)
+                            }
+                        }
 
                         self.users = [user]
                         
@@ -515,7 +579,7 @@ struct HomeView: View {
             "lastOpenPlatform": "IOS"
         ])
     }
-
+    
     
     //get data pengumuman
     func fetchAnnouncementData() {

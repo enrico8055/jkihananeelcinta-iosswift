@@ -53,34 +53,42 @@ struct _MyHananeelCintaApp: App {
                         )
                         .ignoresSafeArea()
 
-                        VStack(spacing: 16) {
-                            Spacer()
+                        ZStack {
 
-                            Image("AppLogo")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 150, height: 150)
-                                .clipShape(RoundedRectangle(cornerRadius: 24))
-                                .shadow(color: .black.opacity(0.4), radius: 10, y: 5)
-                                .scaleEffect(showSplash ? 1 : 0.85)
-                                .opacity(showSplash ? 1 : 0)
+                            // BACKGROUND PARTICLES (harus paling bawah)
+                            SplashParticleView()
 
-                            Text("My Hananeel Cinta")
-                                .foregroundColor(.orange)
-                                .font(.system(size: 26, weight: .bold))
-                                .opacity(showSplash ? 1 : 0)
+                            VStack(spacing: 16) {
 
-                            Spacer()
+                                Spacer()
 
-                            VStack(spacing: 6) {
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: .orange))
+                                Image("AppLogo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 150, height: 150)
+                                    .clipShape(RoundedRectangle(cornerRadius: 24))
+                                    .shadow(color: .black.opacity(0.4), radius: 10, y: 5)
+                                    .scaleEffect(showSplash ? 1 : 0.85)
+                                    .opacity(showSplash ? 1 : 0)
 
-                                Text("Version 1.3")
-                                    .foregroundColor(.orange.opacity(0.8))
-                                    .font(.footnote)
+                                Text("My Hananeel Cinta")
+                                    .foregroundColor(.orange)
+                                    .font(.system(size: 26, weight: .bold))
+                                    .opacity(showSplash ? 1 : 0)
+
+                                Spacer()
+
+                                VStack(spacing: 6) {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .orange))
+
+                                    Text("Version " + Constants.versiApp)
+                                        .foregroundColor(.orange.opacity(0.8))
+                                        .font(.footnote)
+                                }
+                                .padding(.bottom, 30)
                             }
-                            .padding(.bottom, 30)
+                            .zIndex(1) // penting biar selalu di atas particles (text/logo)
                         }
                         .transition(.opacity)
                     }
